@@ -1,0 +1,26 @@
+{
+  "name": "web-template",
+  "version": "0.0.1",
+  "authors": [
+    "jasonqu <qiuguo0205@gmail.com>"
+  ],
+  "description": "My web front develop template",
+  "keywords": [
+    "template"
+  ],
+  "license": "MIT",
+  "homepage": "www.unknown.com",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "Bootflat": "~2.0.4",
+    "jquery": "~2.1.4",
+    "bootstrap": "~3.3.5"
+  }
+}
