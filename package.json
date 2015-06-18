@@ -1,0 +1,24 @@
+{
+  "name": "web-template",
+  "version": "0.0.1",
+  "description": "",
+  "main": "gulp.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "jasonqu <qiuguo0205@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jasonqu/repository.git"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.8.11",
+    "gulp-stylus": "^2.0.2",
+    "gulp-uglify": "^1.2.0",
+    "nib": "^1.1.0"
+  },
+  "dependencies": {
+    "bower": "^1.4.1"
+  }
+}
