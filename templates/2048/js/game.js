@@ -1,6 +1,6 @@
 $(document).ready(function () {
     var matrix = [[0, 0, 0, 0],
-        [0, 2, 2, 0],
+        [2, 2, 2, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0]];
 
@@ -31,6 +31,7 @@ $(document).ready(function () {
     console.log(matrix);
     var getDivFromMatrix = function() {
         $(".tile-container").empty();
+        console.log(matrix);
         for (var i = 0; i < 4; i++) {
             for(var j = 0; j < 4; j ++) {
                 if(matrix[i][j] == 0) {
@@ -61,23 +62,24 @@ $(document).ready(function () {
         if (event.which == 37) {
             for (var i = 0; i < 4; i++) {
                 curj = 0;
-                var cvalue = matrix[i][curj];
-                var cstatus = matrixstate[i][curj];
+
+                matrixstate[i][curj] = 0;
+                //var cstatus = matrixstate[i][curj];
                 for (var j = 1; j < 4; j++) {
                     if (matrix[i][j] == 0) {
                         continue;
                     }
                     // else matrix[i][j] > 0
-                    if (cvalue == 0) {
-                        cvalue = matrix[i][j];
-                        matrix[i][curj] = cvalue;
+                    if (matrix[i][curj] == 0) {
+                        matrix[i][curj] = matrix[i][j];
                         matrixstate[i][curj] = 0;
-                        curj = curj + 1;
+
                         matrix[i][j] = 0;
                         matrixstate[i][j] = 0;
-                    } else if (cvalue === matrix[i][j]) {
+                        //curj = curj + 1;
+                    } else if (matrix[i][curj] === matrix[i][j]) {
                         // merge
-                        matrix[i][curj] = cvalue * 2;
+                        matrix[i][curj] = matrix[i][curj] * 2;
                         matrixstate[i][curj] = 2;
                         matrix[i][j] = 0;
                         matrixstate[i][j] = 0;
