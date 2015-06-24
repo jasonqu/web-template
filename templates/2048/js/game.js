@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    var matrix = [[0, 0, 0, 0],
+    var matrix = [[0, 0, 2, 0],
         [2, 2, 2, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0]];
@@ -52,16 +52,54 @@ $(document).ready(function () {
         }
     };
 
+    var generateNew = function(key) {
+        var count = 3;
+        var needGenerate = true;
+        while (needGenerate && count-- > 0 ) {
+            var index = parseInt(Math.random() * 4, 10);
+            if(key === 37) {
+                if(matrix[index][3] == 0) {
+                    matrix[index][3] = 2;
+                    matrixstate[index][3] = 1;
+                    needGenerate = false;
+                }
+            }
+        }
+        if(needGenerate) {
+            if(key === 37) {
+                for(var x = 0; x < 4; x++) {
+                    matrix[x][3] = 2;
+                    matrixstate[x][3] = 1;
+                }
+            }
+        }
+
+
+    };
+
     getDivFromMatrix();
 
 
+    //<div class="tile tile-2 tile-position-3-1"><div class="tile-inner">2</div></div>
+    // css donghua http://www.ruanyifeng.com/blog/2014/02/css_transition_and_animation.html
+    // http://jqueryui.com/switchClass/
+    // http://stackoverflow.com/questions/1248542/jquery-animate-with-css-class-only-without-explicit-styles
+    //$( ".tile-position-3-1" ).switchClass( "tile-position-3-1", "tile-position-1-1", 600 );
+    // not working
+
     $(document).keyup(function (event) {
+        // reset the state
+        matrixstate = [[0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0]];
+
         // 37 <- 38 ^ 39 -> 40 v
         console.log(event);
         console.log(event.which);
         if (event.which == 37) {
             for (var i = 0; i < 4; i++) {
-                curj = 0;
+                var curj = 0;
 
                 matrixstate[i][curj] = 0;
                 //var cstatus = matrixstate[i][curj];
@@ -97,6 +135,7 @@ $(document).ready(function () {
 
                 }
             }
+            generateNew(event.which);
         }
         getDivFromMatrix();
 
