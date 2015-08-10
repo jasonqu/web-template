@@ -59,7 +59,7 @@ SVG的默认样式是黑色填充而不画线。如果你想修改样式，你�
     stroke-width: 5;
  }
 
-CC有很多好处
+CSS有很多好处
 但是使用CSS来应用SVG样式还是会让一些人心里不舒服。因为fill，stroke和stroke-width其实都不是CSS属性(最接近的CSS属性是background-color和border)。如果你想将SVG专用的规则标记出来，你可以在选择器中加上svg关键字。
 
 svg .pumpkin {
@@ -252,6 +252,7 @@ SVG中没有”层”和深度的概念。将SVG视为画布就很好理解了�
                     .attr("font-size", "11px")
                     .attr("fill", "red");
 
+尺度
 “尺度是将输入域映射为输出范围的函数”，这是Mike Bostock对D3尺度的定义。
 
 数据集中的值很有可能不会精确对应于可视化中的像元。因此，尺度提供了一种方便的方式，将数据值映射为基于可视化目的的新值。
@@ -336,7 +337,7 @@ var padding = 20;
 x.range([padding,  w - padding * 2]);
 y.range([h - padding, padding]);
 
-还有一件事需要考虑一下。之前，我们的cirlce半径是y值的平方根，我们同样也可以为其定制一个尺度函数。
+还有一件事需要考虑一下。之前，我们的circle半径是y值的平方根，我们同样也可以为其定制一个尺度函数。
 
 var rScale = d3.scale.linear()
                .domain([0, d3.max(dataset, function(d) { return d[1]; })])
@@ -415,6 +416,7 @@ y轴类似
 var formatAsPercentage = d3.format(".1%");
 xAxis.tickFormat(formatAsPercentage);
 
+动画
 http://alignedleft.com/tutorials/d3/transitions
 
 http://alignedleft.com/projects/2014/easy-as-pi/
@@ -447,6 +449,246 @@ http://www.ourd3js.com/wordpress/
 很多中文资料
 
 
+【 D3.js 入门系列 】 入门总结
+http://www.ourd3js.com/wordpress/?p=396
+
+### 选择元素和绑定数据
+
+在 D3 中，用于选择元素的函数有两个：
+
+* d3.select()：是选择所有指定元素的第一个
+* d3.selectAll()：是选择指定元素的全部
+这两个函数返回的结果称为选择集。
+
+D3 中是通过以下两个函数来绑定数据的：
+
+* datum()：绑定一个数据到选择集上
+* data()：绑定一个数组到选择集上，数组的各项值分别与选择集的各元素绑定
+
+### 做一个简单的图表！
+
+svg.selectAll("rect")   //选择svg内所有的矩形
+    .data(dataset)  //绑定数组
+    .enter()        //指定选择集的enter部分
+    .append("rect") //添加足够数量的矩形元素
+这段代码添加了与 dataset 数组的长度相同数量的矩形
+当有数据，而没有足够图形元素的时候，使用此方法可以添加足够的元素。
+
+var width = 300;  //画布的宽度
+var height = 300;   //画布的高度
+
+var svg = d3.select("body")     //选择文档中的body元素
+    .append("svg")          //添加一个svg元素
+    .attr("width", width)       //设定宽度
+    .attr("height", height);    //设定高度
+
+var rectHeight = 25;   //每个矩形所占的像素高度(包括空白)
+
+svg.selectAll("rect")
+    .data(dataset)
+    .enter()
+    .append("rect")
+    .attr("x",20)
+    .attr("y",function(d,i){
+         return i * rectHeight;
+    })
+    .attr("width",function(d){
+         return d;
+    })
+    .attr("height",rectHeight-2)
+    .attr("fill","steelblue");
+
+
+修改方法
+style
+append
+insert
+remove
+
+动画方法
+transition()
+duration()
+ease()
+delay()
+
+### 理解 update, enter, exit 的使用
+http://www.ourd3js.com/wordpress/?p=149
+
+	svg.selectAll("rect")
+           .data(dataset)
+           .enter()
+           .append("rect")
+
+当所选择的 数量比绑定的数据 dataset 的数量少的时候，就会用到以上代码，但之前并没有深究是原因。这一节就详细说说当被选择元素和数据数量不一致时该如何处理。
+
+1. update()
+
+当对应的元素正好满足时 （ 绑定数据数量 = 对应元素 ）
+
+实际上并不存在这样一个函数，只是为了要与之后的 enter() 和 exit() 一起说明才认为有这样一个函数。当对应元素正好满足时，后面直接跟 text ，style 等操作即可。
+
+2. enter()
+
+当对应的元素不足时 （ 绑定数据数量 > 对应元素 ）
+
+当对应的元素不足时，要添加元素，使之与绑定数据的数量相等。后面跟 append 函数添加元素。
+
+3. exit()
+
+当对应的元素过多时 （ 绑定数据数量 < 对应元素 ）
+
+当对应的元素过多时，通常要删除元素，使之与绑定数据的数量相等。后面跟 remove 函数删除元素。
+
+实例
+
+<body>
+		<p>AAAAAAAAA</p>
+		<p>BBBBBBBBB</p>
+		<p>CCCCCCCCC</p>
+
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script>
+
+		var dataset = [ 10 , 20 , 30 , 40 , 50 ];
+
+		var update = d3.select("body").selectAll("p").data(dataset);
+		var enter  = update;
+
+		update.text(function(d,i){
+				return "update " + d;
+			});
+
+		enter.enter()
+			 .append("p")
+			 .text(function(d,i){
+				return "enter " + d;
+			});
+
+</script>
+</body>
+
+exit
+
+		var dataset = [ 10 , 20 ];
+
+		var update = d3.select("body").selectAll("p").data(dataset);
+		var exit  = update;
+
+		update.text(function(d,i){
+				return "update " + d;
+			});
+
+		exit.exit()
+			 .text(function(d,i){
+				return "exit";
+			});
+
+元素可以监听事件
+
+常用的鼠标事件（event）有：
+
+click  ： 鼠标单击某元素时，相当于 mousedown 和 mouseup 组合在一起
+mouseover  ： 鼠标移到某元素上
+mouseout  ： 鼠标从某元素移开
+mousemove ： 鼠标被移动
+mousedown : 鼠标按钮被按下
+mouseup : 鼠标按钮被松开
+dblclick  ：  鼠标双击
+
+svg.selectAll("rect")
+		   .data(dataset)
+		   .enter()
+		   .append("rect")
+		   .attr("x", function(d,i){
+				return 30 + xScale(i);
+		   } )
+		   .attr("y",function(d,i){
+				return 50 + 500 - yScale(d) ;
+		   })
+		   .attr("width", function(d,i){
+				return xScale.rangeBand();
+		   })
+		   .attr("height",yScale)
+		   .attr("fill","red")
+		   .on("click",function(d,i){
+				d3.select(this)
+				  .attr("fill","green");
+		   })
+		   .on("mouseover",function(d,i){
+				d3.select(this)
+				  .attr("fill","yellow");
+		   })
+		   .on("mouseout",function(d,i){
+				d3.select(this)
+				  .transition()
+		          .duration(500)
+				  .attr("fill","red");
+		   });
+
+
+### 常见可视化图形（ Layout ）
+
+https://github.com/mbostock/d3/wiki/Layouts
+
+Layout 是 D3 中 “制作常见图形的函数”，用 Layout 可以轻松地对输入数据进行转换，使得它能容易地适应可视化图形使用的需要。
+
+D3 中共有12组 Layout 函数，这些函数不是为了在绘制中布局什么，而是对输入的数据进行转换，转换成容易进行可视化的数据。将数据绘制成图形时，需要其他的代码。我们可以简单地把 Layout 理解为“常见图形的数据转换函数”，比如饼状图等等。
+
+http://www.ourd3js.com/wordpress/?p=163
+
+### 饼状图的制作
+
+Layout 的作用只是转换数据，将不适合图形化的数据转化成适合图形化的数据。
+
+var dataset = [ 30 , 10 , 43 , 55 , 13 ];
+var pie = d3.layout.pie();
+
+5个整数被转换成了5个 Object ，每个存有起始角度和结束角度，以及原整数，这就是 Layout 的作用，将不适合图形化的数据转换成适合图形化的数据
+
+用绘制弧线的方法来作饼状图
+
+		var svg = d3.select("body").append("svg")
+								.attr("width",width)
+								.attr("height",height);
+
+		var pie = d3.layout.pie();
+
+		var outerRadius = width / 2;
+		var innerRadius = width / 4;
+		var arc = d3.svg.arc()
+						.innerRadius(innerRadius)
+						.outerRadius(outerRadius);
+
+		var color = d3.scale.category10();
+
+		var arcs = svg.selectAll("g")
+					  .data(pie(dataset))
+					  .enter()
+					  .append("g")
+					  .attr("transform","translate("+outerRadius+","+outerRadius+")");
+
+		arcs.append("path")
+			.attr("fill",function(d,i){
+				return color(i);
+			})
+			.attr("d",function(d){
+				return arc(d);
+			});
+
+		arcs.append("text")
+			.attr("transform",function(d){
+				return "translate(" + arc.centroid(d) + ")";
+			})
+			.attr("text-anchor","middle")
+			.text(function(d){
+				return d.value;
+			});
+
+		console.log(dataset);
+		console.log(pie(dataset));
+
+### 力学图的制作
+http://www.ourd3js.com/wordpress/?p=196
 
 
 
@@ -456,6 +698,23 @@ http://www.ourd3js.com/wordpress/
 
 
 
+
+
+
+
+
+
+
+
+
+
+svg资源
+http://www.w3school.com.cn/svg/svg_examples.asp
+https://developer.mozilla.org/zh-CN/docs/Web/SVG
+
+svg工具
+https://github.com/duopixel/Method-Draw
+http://editor.method.ac/
 
 svg framework javascript
 http://webdesignmoo.com/2014/10-useful-jquery-svg-libraries/
