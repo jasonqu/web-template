@@ -46,10 +46,10 @@ function anotherFunc(){
     // variables
     console.log(text);        // I am exposed!
     console.log(insideThird); // I am inside third
-    console.log(insideFirst); // Uncaught ReferenceError: insideFirst is not defined
+    console.log(insideFirst); // ReferenceError
     // functions
     first();
-    second();
+    second();  // ReferenceError
 }
 
 first();
@@ -63,22 +63,71 @@ http://www.cnblogs.com/lhb25/archive/2011/09/06/javascript-scope-chain.html
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#samplecode').delegate('.line','mouseenter mouseleave',function(){
-            console.log(this);
-            $(this).closest("div").toggleClass('highlighted');
+        // scope 是一个树形结构, linenum >= 1
+        var blocks = {
+            value : [1, 31],
+            children : [
+                {
+                    value : [3, 18],
+                    children : [
+                        { value : [5, 9] },
+                        { value : [11, 16] }
+                    ]
+                },
+                {value : [20, 28]}
+            ]
+        };
 
+        var getrange = function(node, lineNum) {
+            lineNum = lineNum || 0;
+            var range = node.value;
+            console.log("in " + range[0] + " : " + range[1] + " for line " + lineNum);
+            if(node.value[0] > lineNum || node.value[1] < lineNum) {
+                return [0, 0];
+            }
+
+            if(node.children) {
+                for (var i = 0; i < node.children.length; i++) {
+                    var childRange = getrange(node.children[i], lineNum);
+                    if(childRange[0] > 0) {
+                        return childRange;
+                    }
+                }
+            }
+            return node.value;
+        };
+
+        $('#samplecode').delegate('.line','mouseenter',function(){
+            //$(this).closest("div").toggleClass('highlighted');
             var classList = $(this).attr('class').split(/\s+/);
             $.each(classList, function(index, item){
                 if (item.startsWith('number')) {
-                    var classname = '#samplecode .gutter .' + item;
-                    console.log(classname);
-                    $(classname).toggleClass('highlighted');
+                    var lineNumber = parseInt(item.substring(6));
+                    var range = getrange(blocks, lineNumber);
+                    console.log(range[0] + " : " + range[1] + " for line " + lineNumber);
+
+                    if(range[0] == 0) {
+                        return;
+                    }
+
+                    for (var i = range[0]; i <= range[1]; i++) {
+                        $('#samplecode .gutter .number' + i).addClass('highlighted');
+                        $('#samplecode .code .number' + i).addClass('highlighted');
+                    }
                 }
             });
         });
 
-        $('#samplecode').click(function(){
+        $('#samplecode').delegate('.line','mouseleave',function(){
+            $('#samplecode .line').removeClass('highlighted');
+        });
 
+        $('#samplecode').click(function(){
+            // $('#num0').attr('transform',"translate(95,95)")
+            // .animate({ opacity:0.5});
+
+            d3.selectAll("#num0").transition().attr('transform',"translate(95,95)")
+            .attr('opacity',"0.5")
         });
 
     });
