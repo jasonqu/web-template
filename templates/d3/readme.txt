@@ -645,47 +645,22 @@ var pie = d3.layout.pie();
 
 5个整数被转换成了5个 Object ，每个存有起始角度和结束角度，以及原整数，这就是 Layout 的作用，将不适合图形化的数据转换成适合图形化的数据
 
-用绘制弧线的方法来作饼状图
+实现，见:
+* gallary/simple/pie.html
 
-		var svg = d3.select("body").append("svg")
-								.attr("width",width)
-								.attr("height",height);
+http://www.cnblogs.com/jenry/archive/2010/12/11/1903397.html
+http://tutorials.jenkov.com/svg/svg-transformation.html
+http://www.w3cplus.com/html5/svg-transformations.html
+http://sarasoueidan.com/blog/svg-transformations/
+svg 坐标变换
 
-		var pie = d3.layout.pie();
+path
+https://developer.mozilla.org/zh-CN/docs/Web/SVG/Tutorial/Paths
 
-		var outerRadius = width / 2;
-		var innerRadius = width / 4;
-		var arc = d3.svg.arc()
-						.innerRadius(innerRadius)
-						.outerRadius(outerRadius);
-
-		var color = d3.scale.category10();
-
-		var arcs = svg.selectAll("g")
-					  .data(pie(dataset))
-					  .enter()
-					  .append("g")
-					  .attr("transform","translate("+outerRadius+","+outerRadius+")");
-
-		arcs.append("path")
-			.attr("fill",function(d,i){
-				return color(i);
-			})
-			.attr("d",function(d){
-				return arc(d);
-			});
-
-		arcs.append("text")
-			.attr("transform",function(d){
-				return "translate(" + arc.centroid(d) + ")";
-			})
-			.attr("text-anchor","middle")
-			.text(function(d){
-				return d.value;
-			});
-
-		console.log(dataset);
-		console.log(pie(dataset));
+rect round tow conners
+http://stackoverflow.com/questions/12115691/svg-d3-js-rounded-corner-on-one-corner-of-a-rectangle
+using path。。。
+http://bl.ocks.org/mbostock/3468167
 
 ### 力学图的制作
 http://www.ourd3js.com/wordpress/?p=196
@@ -711,6 +686,26 @@ http://www.ourd3js.com/wordpress/?p=196
 svg资源
 http://www.w3school.com.cn/svg/svg_examples.asp
 https://developer.mozilla.org/zh-CN/docs/Web/SVG
+
+深入svg
+svg箭头
+http://www.waylau.com/svg-marker-arrow/
+https://developer.mozilla.org/zh-CN/docs/Web/SVG/Element/marker
+
+text居中
+https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/text-anchor
+
+svg shadow
+http://www.w3schools.com/svg/svg_feoffset.asp
+http://tutorials.jenkov.com/svg/filters.html
+http://stackoverflow.com/questions/6088409/svg-drop-shadow-using-css3
+
+http://demosthenes.info/blog/598/boxshadow-property-vs-dropshadow-filter-a-complete-comparison
+http://demosthenes.info/blog/600/Creating-a-True-Cross-Browser-Drop-Shadow-Effect-With-CSS-amp-SVG
+
+
+
+
 
 svg工具
 https://github.com/duopixel/Method-Draw

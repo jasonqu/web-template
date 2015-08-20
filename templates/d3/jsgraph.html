@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>D3 Test</title>
+    <link href="jsgraph.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="../../lib/d3/d3.min.js"></script>
+
+
+    <link type="text/css" rel="stylesheet" href="syntaxhighlighter_3.0.83/styles/shCore.css"/> <!--核心样式表(必选)-->
+    <link type="text/css" rel="stylesheet" href="syntaxhighlighter_3.0.83/styles/shThemeDefault.css"/> <!--主题样式表(多重样式选一)-->
+
+    <script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script> <!--核心js脚本(必选)-->
+    <script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushJScript.js"></script>
+    <script type="text/javascript">
+        SyntaxHighlighter.all()
+    </script>
+
+    <script src="../../lib/jquery/dist/jquery.js"></script>
+
+</head>
+<body>
+
+<div id="samplecode" style="width: 500px;">
+<pre id="samplepre" class="brush: js">
+function doSomething(){
+    var blogName="梦想天空";
+    function innerSay(){
+        alert(blogName);
+    }
+    innerSay();
+}
+alert(blogName); //脚本错误
+innerSay(); //脚本错误
+</pre>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#samplecode td+div').addClass('highlighted');
+        $('.line').addClass('highlighted');
+
+    });
+</script>
+
+
+
+<svg width="800" height="600">
+    <defs>
+        <filter id="f3" x="0" y="0" width="200%" height="200%">
+            <feOffset result="offOut" in="SourceAlpha" dx="1" dy="1" />
+            <feGaussianBlur result="blurOut" in="offOut" stdDeviation="5" />
+            <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+        </filter>
+    </defs>
+
+    <defs>
+        <marker id="markerCircle" markerWidth="8" markerHeight="8" refx="5" refy="5">
+            <circle cx="5" cy="5" r="3" style="stroke: none; fill:#000000;"/>
+        </marker>
+
+        <marker id="markerArrow" markerWidth="13" markerHeight="13" refx="2" refy="6" orient="auto">
+            <path d="M2,2 L2,11 L10,6 L2,2" style="fill: #000000;" />
+        </marker>
+    </defs>
+
+
+    <g transform="translate(100,100)">
+        <rect x="0" y="0" width="120" height="60" fill="white" stroke-width="3" stroke="Black" filter="url(#f3)"></rect>
+        <g>
+            <rect x="0" y="0" width="120" height="30" fill="rgba(0,0,255,0.5)" stroke-width="1" stroke="Black"></rect>
+            <text class="header" x="60" y="20" text-anchor="middle" fill="white">Add</text>
+        </g>
+        <g transform="translate(0,30)">
+            <rect x="0" y="0" width="60" height="30" fill="rgba(0,0,255,0.1)" stroke-width="1" stroke="Black"></rect>
+            <text x="30" y="20" text-anchor="middle" fill="black">[[scope]]</text>
+            <rect x="60" y="0" width="60" height="30" fill="rgba(0,0,255,0.1)" stroke-width="1" stroke="Black"></rect>
+            <text x="90" y="20" text-anchor="middle" fill="black"></text>
+        </g>
+    </g>
+
+    <path d="M190,145 H250 V115 H292"
+          style="stroke: #000000; stroke-width: 1px; fill: none;
+                   marker-start: url(#markerCircle);
+                   marker-end: url(#markerArrow) "
+            />
+
+    <g transform="translate(300,100)">
+        <rect x="0" y="0" width="120" height="60" fill="white" stroke-width="3" stroke="Black" filter="url(#f3)"></rect>
+        <g>
+            <rect x="0" y="0" width="120" height="30" fill="rgba(0,0,255,0.5)" stroke-width="1" stroke="Black"></rect>
+            <text class="header" x="60" y="20" text-anchor="middle" fill="white">Scope Chain</text>
+        </g>
+        <g transform="translate(0,30)">
+            <rect x="0" y="0" width="60" height="30" fill="rgba(0,0,255,0.1)" stroke-width="1" stroke="Black"></rect>
+            <text x="30" y="20" text-anchor="middle" fill="black">0</text>
+            <rect x="60" y="0" width="60" height="30" fill="rgba(0,0,255,0.1)" stroke-width="1" stroke="Black"></rect>
+            <text x="90" y="20" text-anchor="middle" fill="black"></text>
+        </g>
+    </g>
+
+    <path d="M390,145 H450 V115 H492"
+          style="stroke: #000000; stroke-width: 1px; fill: none;
+                   marker-start: url(#markerCircle);
+                   marker-end: url(#markerArrow) "
+            />
+
+    <g transform="translate(500,100)">
+        <rect x="0" y="0" width="120" height="120" fill="white" stroke-width="3" stroke="Black" filter="url(#f3)"></rect>
+        <g>
+            <rect x="0" y="0" width="120" height="30" fill="rgba(0,0,255,0.5)" stroke-width="1" stroke="Black"></rect>
+            <text class="header" x="60" y="20" text-anchor="middle" fill="white">Global object</text>
+        </g>
+        <g transform="translate(0,30)">
+            <rect x="0" y="0" width="60" height="30" fill="rgba(0,0,255,0.1)" stroke-width="1" stroke="Black"></rect>
+            <text x="30" y="20" text-anchor="middle" fill="black">this</text>
+            <rect x="60" y="0" width="60" height="30" fill="rgba(0,0,255,0.1)" stroke-width="1" stroke="Black"></rect>
+            <text x="90" y="20" text-anchor="middle" fill="black">window</text>
+        </g>
+        <g transform="translate(0,60)">
+            <rect x="0" y="0" width="60" height="30" fill="rgba(0,0,255,0.1)" stroke-width="1" stroke="Black"></rect>
+            <text x="30" y="20" text-anchor="middle" fill="black">window</text>
+            <rect x="60" y="0" width="60" height="30" fill="rgba(0,0,255,0.1)" stroke-width="1" stroke="Black"></rect>
+            <text x="90" y="20" text-anchor="middle" fill="black">(object)</text>
+        </g>
+        <g transform="translate(0,90)">
+            <rect x="0" y="0" width="60" height="30" fill="rgba(0,0,255,0.1)" stroke-width="1" stroke="Black"></rect>
+            <text x="30" y="20" text-anchor="middle" fill="black">add</text>
+            <rect x="60" y="0" width="60" height="30" fill="rgba(0,0,255,0.1)" stroke-width="1" stroke="Black"></rect>
+            <text x="90" y="20" text-anchor="middle" fill="black">(function)</text>
+        </g>
+    </g>
+</svg>
+
+<script type="text/javascript">
+
+    var nodes = {
+        Add: {
+            '[[Scope]]': null
+        }
+    };
+
+    var links = [
+        ['Add', '[[Scope]]']
+    ];
+
+    var dataset = [
+        [5, 20],
+        [480, 90],
+        [250, 50],
+        [100, 33],
+        [330, 95],
+        [410, 12],
+        [475, 44],
+        [25, 67],
+        [85, 21],
+        [220, 88]
+    ];
+
+    //    var w = 500;
+    //    var h = 500;
+    //    var padding = 20;
+    //    var svg = d3.select("body")
+    //            .append("svg")
+    //            .attr("width", w)
+    //            .attr("height", h);
+    //
+    //    var xScale = d3.scale.linear()
+    //            .domain([0, d3.max(dataset, function(d) { return d[0]; })])
+    //            .range([padding, w - padding * 2]);
+    //    var yScale = d3.scale.linear()
+    //            .domain([0, d3.max(dataset, function(d) { return d[1]; })])
+    //            .range([h - padding, padding]);
+    //    var rScale = d3.scale.linear()
+    //            .domain([0, d3.max(dataset, function(d) { return d[1]; })])
+    //            .range([2, 5]);
+    //
+    //    svg.selectAll("circle")
+    //            .data(dataset)
+    //            .enter()
+    //            .append("circle")
+    //            .attr("cx", function(d) {
+    //                return xScale(d[0]);
+    //            })
+    //            .attr("cy", function(d) {
+    //                return yScale(d[1]);
+    //            })
+    //            .attr("r", function(d) {
+    //                return rScale(d[1]);
+    //            });
+    //
+    //    svg.selectAll("text")
+    //            .data(dataset)
+    //            .enter()
+    //            .append("text")
+    //            .text(function(d) {
+    //                return d[0] + "," + d[1];
+    //            })
+    //            .attr("x", function(d) {
+    //                return xScale(d[0]);
+    //            })
+    //            .attr("y", function(d) {
+    //                return yScale(d[1]);
+    //            })
+    //            .attr("font-family", "sans-serif")
+    //            .attr("font-size", "11px")
+    //            .attr("fill", "red");
+    //
+    //    var xAxis = d3.svg.axis()
+    //            .scale(xScale)
+    //            .orient("bottom")
+    //            .ticks(5);  //Set rough # of ticks
+    //    svg.append("g")
+    //            .attr("class", "axis")
+    //            .attr("transform", "translate(0," + (h - padding) + ")")
+    //            .call(xAxis);
+    //
+    //    var yAxis = d3.svg.axis()
+    //            .scale(yScale)
+    //            .orient("left")
+    //            .ticks(5);
+    //    svg.append("g")
+    //            .attr("class", "axis")
+    //            .attr("transform", "translate(" + padding + ",0)")
+    //            .call(yAxis);
+
+</script>
+
+<!--<script type="text/javascript">-->
+    <!--$(document).ready(function () {-->
+<!--//        $('#region').change(function(){-->
+<!--//            var v = $(this).children('option:selected').val();-->
+<!--//            $('#item').empty();-->
+<!--//            for(var key in regions[v]) {-->
+<!--//                $('#item').append("<option value='" + key + "'>" + key + " - " + regions[v][key] + "</option>");-->
+<!--//            }-->
+<!--//        });-->
+<!--//        $('#region').trigger('change');-->
+<!--//-->
+<!--//        $('#plugin-history-table').delegate('button', 'click', function() {-->
+<!--//            //$( this ).toggleClass( "chosen" );-->
+<!--//        });-->
+<!--//-->
+<!--//        $('#app-search').keyup(function() {-->
+<!--//            $('#apps-table tr td').removeClass('success');-->
+<!--//            $('#apps-table tr').removeClass('hidden');-->
+<!--//-->
+<!--//            var highlight = this.value;-->
+<!--//            if(highlight) {-->
+<!--//                $('#apps-table tr').filter(function( index ) {-->
+<!--//                    return $(this).text().indexOf(highlight) === -1;-->
+<!--//                }).addClass('hidden');-->
+<!--//-->
+<!--//                $('#apps-table tr td').filter(function( index ) {-->
+<!--//                    return $(this).text().indexOf(highlight) > -1;-->
+<!--//                }).addClass('success');-->
+<!--//            }-->
+<!--//        });-->
+
+    <!--});-->
+</script>
+</body>
+</html>
