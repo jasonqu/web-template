@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- <link rel="icon" href="../../favicon.ico"> -->
+
+    <title>Dashboard Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link href="bootstrap-treeview.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="dashboard.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Help</a></li>
+            </ul>
+            <form class="navbar-form navbar-right">
+                <input type="text" class="form-control" placeholder="Search...">
+            </form>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <form>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">添加数据源
+                    </button>
+                    <button type="button" class="btn btn-info" id="preview">预览xml
+                    </button>
+                </div>
+                <div class="form-group">
+                    <div id="treeBtns"></div>
+                </div>
+            </form>
+        </div>
+        <div id="svgcont" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+            <svg id="graph" width="1200" height="800">
+                <defs>
+                    <filter id="f3" x="0" y="0" width="200%" height="200%">
+                        <feOffset result="offOut" in="SourceAlpha" dx="1" dy="1"></feOffset>
+                        <feGaussianBlur result="blurOut" in="offOut" stdDeviation="5"></feGaussianBlur>
+                        <feBlend in="SourceGraphic" in2="blurOut" mode="normal"></feBlend>
+                    </filter>
+                </defs>
+
+                <defs>
+                    <marker id="markerCircle" markerWidth="8" markerHeight="8" refX="5" refY="5">
+                        <circle cx="5" cy="5" r="3" style="stroke: none; fill:#000000;"></circle>
+                    </marker>
+
+                    <marker id="markerArrow" markerWidth="13" markerHeight="13" refX="2" refY="6" orient="auto">
+                        <path d="M2,2 L2,11 L10,6 L2,2" style="fill: #000000;"></path>
+                    </marker>
+                </defs>
+
+
+            </svg>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div id="preview" class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <pre><code id="codepreview">
+    </code></pre>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+
+
+                <form id="formdatasource" class="form-horizontal">
+                    <div class="form-group">
+                        <label for="SourceId" class="col-sm-3 control-label">源数据源ID</label>
+
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="SourceId" name="SourceId"
+                                   placeholder="SourceId">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="SourceEndpointURI" class="col-sm-3 control-label">源URI</label>
+
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="SourceEndpointURI" name="SourceEndpointURI"
+                                   placeholder="SourceEndpointURI">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="SourceRestrictTo" class="col-sm-3 control-label">源约束</label>
+
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="SourceRestrictTo" name="SourceRestrictTo"
+                                   placeholder="SourceRestrictTo">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="TargetId" class="col-sm-3 control-label">目标ID</label>
+
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="TargetId" name="TargetId"
+                                   placeholder="TargetId">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="TargetEndpointURI" class="col-sm-3 control-label">目标URI</label>
+
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="TargetEndpointURI" name="TargetEndpointURI"
+                                   placeholder="TargetEndpointURI">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="TargetRestrictTo" class="col-sm-3 control-label">目标约束</label>
+
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="TargetRestrictTo" name="TargetRestrictTo"
+                                   placeholder="TargetRestrictTo">
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="savedatasource" type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">函数</h4>
+            </div>
+            <div class="modal-body">
+                <form id="formtreenode" class="form-horizontal">
+                    <div class="form-group">
+                        <label for="parent" class="col-sm-3 control-label">父函数</label>
+
+                        <div class="col-sm-9">
+                            <select class="form-control" id="parent" name="parent">
+                                <option value=""> -</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="threshold" class="col-sm-3 control-label">目标约束</label>
+
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="threshold" name="threshold"
+                                   placeholder="threshold">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputpath" class="col-sm-3 control-label">目标约束</label>
+
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="inputpath" name="inputpath"
+                                   placeholder="inputpath">
+                        </div>
+                    </div>
+
+
+                </form>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" class="close">Close</button>
+                <button id="savetreenode" type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- BEGIN: Underscore Template Definition. -->
+
+<script type="text/template" id="template">
+    <g id="<%=data.id %>" transform="translate(<%=data.x %>,<%=data.y %>)">
+        <rect class="header" x="0" y="0" width="150" height="30" fill="rgba(0, 102, 255, 0.5)" fill-opacity="1.0"
+              stroke-width="1" stroke="Black"></rect>
+        <text class="header" x="75" y="22" text-anchor="middle" fill="Black"><%=data.name %></text>
+    </g>
+</script>
+
+<script type="text/template" id="xmlresult">
+    <?xml version="1.0" encoding="utf-8" ?>
+    <Silk>
+        <Prefixes>
+            <Prefix id="rdf" namespace="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+            <Prefix id="rdfs" namespace="http://www.w3.org/2000/01/rdf-schema#"/>
+            <Prefix id="foaf" namespace="http://xmlns.com/foaf/0.1/"/>
+            <Prefix id="owl" namespace="http://www.w3.org/2002/07/owl#"/>
+            <Prefix id="dbpedia-owl" namespace="http://dbpedia.org/ontology/"/>
+            <Prefix id="dbpedia" namespace="http://dbpedia.org/resource/"/>
+            <Prefix id="dbpedia-prop" namespace="http://dbpedia.org/property/"/>
+            <Prefix id="dc" namespace="http://purl.org/dc/terms/"/>
+            <Prefix id="drugbank" namespace="http://www4.wiwiss.fu-berlin.de/drugbank/resource/drugbank/"/>
+            <Prefix id="opencyc" namespace="http://sw.opencyc.org/2008/06/10/concept/"/>
+            <Prefix id="sider" namespace="http://www4.wiwiss.fu-berlin.de/sider/resource/sider/"/>
+        </Prefixes>
+
+        <%=data.ds %>
+        <%=data.il %>
+
+        <DataSources>
+            <DataSource id="sider" type="sparqlEndpoint">
+                <Param name="endpointURI" value="http://www4.wiwiss.fu-berlin.de/sider/sparql"/>
+            </DataSource>
+
+            <DataSource id="drugbank" type="sparqlEndpoint">
+                <Param name="endpointURI" value="http://www4.wiwiss.fu-berlin.de/drugbank/sparql"/>
+            </DataSource>
+        </DataSources>
+
+        <Interlinks>
+            <Interlink id="drugs">
+                <LinkType>owl:sameAs</LinkType>
+
+                <SourceDataset dataSource="sider" var="a">
+                    <RestrictTo>
+                        ?a rdf:type sider:drugs
+                    </RestrictTo>
+                </SourceDataset>
+
+                <TargetDataset dataSource="drugbank" var="b">
+                    <RestrictTo>
+                        ?b rdf:type drugbank:drugs
+                    </RestrictTo>
+                </TargetDataset>
+
+                <LinkageRule>
+                    <Aggregate type="max">
+                        <Compare metric="levenshteinDistance" threshold="1">
+                            <TransformInput function="lowerCase">
+                                <Input path="?a/rdfs:label"/>
+                            </TransformInput>
+                            <TransformInput function="lowerCase">
+                                <Input path="?b/rdfs:label"/>
+                            </TransformInput>
+                        </Compare>
+                        <Compare metric="levenshteinDistance" threshold="1">
+                            <TransformInput function="lowerCase">
+                                <Input path="?a/rdfs:label"/>
+                            </TransformInput>
+                            <TransformInput function="lowerCase">
+                                <Input path="?b/drugbank:synonym"/>
+                            </TransformInput>
+                        </Compare>
+                    </Aggregate>
+                </LinkageRule>
+
+                <Filter limit="1"/>
+
+            </Interlink>
+        </Interlinks>
+
+        <Outputs>
+            <Output maxConfidence="0.1" type="file">
+                <Param name="file" value="sider_drugbank_drugs_verify_links.xml"/>
+                <Param name="format" value="alignment"/>
+            </Output>
+            <Output minConfidence="0.1" type="file">
+                <Param name="file" value="sider_drugbank_drugs_accepted_links.xml"/>
+                <Param name="format" value="alignment"/>
+            </Output>
+        </Outputs>
+    </Silk>
+</script>
+
+<!-- END: Underscore Template Definition. -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="../../lib/Bootflat/js/jquery-1.10.1.min.js"></script>
+<script src="../../lib/Bootflat/js/bootstrap.min.js"></script>
+<script src="http://cdn.bootcss.com/underscore.js/1.8.3/underscore-min.js"></script>
+<script src="bootstrap-treeview.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
